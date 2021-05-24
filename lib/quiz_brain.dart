@@ -31,17 +31,28 @@ class QuizBrain {
         true),
   ];
 
-  String getQuestionText(){
+  QuizBrain() {
+    reset();
+  }
+
+  String getQuestionText() {
     return _questions[_questionIndex].questionText;
   }
 
-  bool getQuestionAnswer(){
+  bool getQuestionAnswer() {
     return _questions[_questionIndex].questionAnswer;
   }
 
-  void nextQuestion() {
-    if (_questionIndex < _questions.length - 1) {
+  void goNextQuestion() {
+    if (hasNextQuestion()) {
       _questionIndex++;
     }
+  }
+
+  bool hasNextQuestion() => _questionIndex < _questions.length - 1;
+
+  void reset() {
+    _questionIndex = 0;
+    _questions.shuffle();
   }
 }
