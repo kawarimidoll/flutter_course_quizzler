@@ -33,19 +33,16 @@ class _QuizPageState extends State<QuizPage> {
   Icon ngIcon = Icon(Icons.close, color: Colors.red);
 
   List<Icon> scoreKeeper = [];
-  int questionIndex = 0;
 
   void confirmAnswer(bool userAnswer) {
     scoreKeeper.add(
-        quizBrain.questions[questionIndex].questionAnswer == userAnswer
+        quizBrain.getQuestionAnswer() == userAnswer
             ? okIcon
             : ngIcon);
-  }
 
-  void nextQuestion() {
-    if (questionIndex < quizBrain.questions.length - 1) {
-      questionIndex++;
-    }
+    setState(() {
+      quizBrain.nextQuestion();
+    });
   }
 
   @override
@@ -60,7 +57,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizBrain.questions[questionIndex].questionText,
+                quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -86,10 +83,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
-                setState(() {
-                  confirmAnswer(true);
-                  nextQuestion();
-                });
+                confirmAnswer(true);
               },
             ),
           ),
@@ -110,10 +104,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                setState(() {
-                  confirmAnswer(false);
-                  nextQuestion();
-                });
+                confirmAnswer(false);
               },
             ),
           ),
