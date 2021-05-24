@@ -25,11 +25,32 @@ class QuizPage extends StatefulWidget {
   _QuizPageState createState() => _QuizPageState();
 }
 
-Icon okIcon = Icon(Icons.check, color: Colors.green);
-Icon ngIcon = Icon(Icons.close, color: Colors.red);
-
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> scoreKeeper = [okIcon, ngIcon, ngIcon, okIcon];
+  Icon okIcon = Icon(Icons.check, color: Colors.green);
+  Icon ngIcon = Icon(Icons.close, color: Colors.red);
+
+  List<Icon> scoreKeeper = [];
+  List<String> questions = [
+    'You can lead a cow down stairs but not up stairs.',
+    'Approximately one quarter of human bones are in the feet.',
+    'A slug\'s blood is green.',
+  ];
+  List<bool> answers = [
+    false,
+    true,
+    true,
+  ];
+  int questionIndex = 0;
+
+  void confirmAnswer(bool userAnswer) {
+    scoreKeeper.add(answers[questionIndex] == userAnswer ? okIcon : ngIcon);
+  }
+
+  void nextQuestion() {
+    if (questionIndex < questions.length - 1) {
+      questionIndex++;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +64,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                questions[questionIndex],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -68,10 +89,11 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  scoreKeeper.add(okIcon);
-                });
                 //The user picked true.
+                setState(() {
+                  confirmAnswer(true);
+                  nextQuestion();
+                });
               },
             ),
           ),
@@ -93,7 +115,8 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 //The user picked false.
                 setState(() {
-                  scoreKeeper.add(ngIcon);
+                  confirmAnswer(false);
+                  nextQuestion();
                 });
               },
             ),
